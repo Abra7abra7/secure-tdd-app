@@ -40,5 +40,17 @@ describe('C.O.R.E. OSINT Analytics Flow', () => {
 
         // Ensure the card has military intent
         cy.get('.pt-card').should('exist');
+
+        // 5. Phase 12: OSINT AI Copilot Verification
+        cy.contains('AI Profiling Agent').should('be.visible');
+        cy.contains('Spusti Hĺbkovú Analýzu').click();
+
+        // Verify terminal stream
+        cy.get('.terminal-window').should('be.visible');
+        cy.contains('INITIATING_SCRAPE_PROTOCOL').should('be.visible');
+
+        // Wait for the report
+        cy.contains('Executive Summary', { timeout: 6000 }).scrollIntoView().should('exist');
+        cy.contains('Risk Profile: MODERATE').should('exist');
     });
 });

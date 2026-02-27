@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useEntitySearch } from '../../api/useEntitySearch';
 import { Search, Building2, MapPin, Hash, AlertTriangle, Loader2 } from 'lucide-react';
+import { IntelligencePanel } from './IntelligencePanel';
 import './EntityLookup.css';
 
 export interface EntityLookupProps {
@@ -80,6 +81,7 @@ export const EntityLookup: React.FC<EntityLookupProps> = ({ initialQuery = '' })
                                     <button className="pt-button pt-intent-primary pt-small">Add to Graph</button>
                                     <button className="pt-button pt-minimal pt-small">View Contracts</button>
                                 </div>
+                                <IntelligencePanel entityName={entity.name} entityIco={entity.ico.toString()} />
                             </div>
                         ))}
                     </div>
