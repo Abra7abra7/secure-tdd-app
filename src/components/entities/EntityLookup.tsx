@@ -3,9 +3,20 @@ import { useEntitySearch } from '../../api/useEntitySearch';
 import { Search, Building2, MapPin, Hash, AlertTriangle, Loader2 } from 'lucide-react';
 import './EntityLookup.css';
 
-export const EntityLookup: React.FC = () => {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [debouncedTerm, setDebouncedTerm] = useState('');
+export interface EntityLookupProps {
+    initialQuery?: string;
+}
+
+export const EntityLookup: React.FC<EntityLookupProps> = ({ initialQuery = '' }) => {
+    const [searchTerm, setSearchTerm] = useState(initialQuery);
+    const [debouncedTerm, setDebouncedTerm] = useState(initialQuery);
+
+    // Update if initialQuery changes from outside (e.g. Omnibox search)
+    React.useEffect(() => {
+        if (initialQuery) {
+            setSearchTerm(initialQuery);
+        }
+    }, [initialQuery]);
 
     // Simple debounce effect
     React.useEffect(() => {

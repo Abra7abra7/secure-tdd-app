@@ -13,6 +13,7 @@ import './App.css'
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentView, setCurrentView] = useState('dashboard');
+  const [globalQuery, setGlobalQuery] = useState('');
 
   const handleLogin = (username: string) => {
     // In a real app we'd verify with backend.
@@ -20,14 +21,20 @@ function App() {
     console.log(`User ${username} securely logged in.`);
   };
 
+  const handleGlobalSearch = (query: string) => {
+    setGlobalQuery(query);
+    setCurrentView('subjekty');
+    window.location.hash = '#subjekty';
+  };
+
   const renderContent = () => {
     switch (currentView) {
-      case 'dashboard': return <DashboardGrid />;
+      case 'dashboard': return <DashboardGrid onSearch={handleGlobalSearch} />;
       case 'zmluvy': return <DataTable />;
-      case 'subjekty': return <EntityLookup />;
+      case 'subjekty': return <EntityLookup initialQuery={globalQuery} />;
       case 'analyza': return <ReactFlowProvider><EntityGraph /></ReactFlowProvider>;
       case 'mapa': return <GeoMap />;
-      default: return <DashboardGrid />;
+      default: return <DashboardGrid onSearch={handleGlobalSearch} />;
     }
   };
 

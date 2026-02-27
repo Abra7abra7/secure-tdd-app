@@ -5,7 +5,11 @@ import { useContracts } from '../../api/useContracts';
 import { Search, Activity, AlertCircle, Euro } from 'lucide-react';
 import './Dashboard.css';
 
-export const DashboardGrid: React.FC = () => {
+export interface DashboardGridProps {
+    onSearch?: (query: string) => void;
+}
+
+export const DashboardGrid: React.FC<DashboardGridProps> = ({ onSearch }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const { data: contracts, isLoading } = useContracts();
 
@@ -20,6 +24,12 @@ export const DashboardGrid: React.FC = () => {
     const totalValue = contracts?.reduce((sum, c) => sum + c.sum, 0) || 0;
     const contractCount = contracts?.length || 0;
     const avgValue = contractCount > 0 ? totalValue / contractCount : 0;
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter' && searchQuery.trim() && onSearch) {
+            onSearch(searchQuery.trim());
+        }
+    };
 
     return (
         <div className="pt-intel-dashboard" data-testid="dashboard-grid">
@@ -36,6 +46,7 @@ export const DashboardGrid: React.FC = () => {
                         placeholder="Search global ontology (Entities, Contracts, Nodes)..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyDown={handleKeyDown}
                         className="pt-input omnibox-input pt-monospace"
                     />
                 </div>
