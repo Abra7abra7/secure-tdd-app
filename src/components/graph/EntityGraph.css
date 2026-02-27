@@ -1,0 +1,130 @@
+.pt-intel-graph-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    background-color: #050505;
+    color: #aeb4b8;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    border: 1px solid #30404d;
+}
+
+.pt-graph-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #0a0a0a;
+    border-bottom: 1px solid #30404d;
+}
+
+.pt-graph-title {
+    color: #ced9e0;
+    margin: 0;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.pt-graph-search {
+    background-color: #10161a;
+    border: 1px solid #30404d;
+    color: #f5f8fa;
+    padding: 0.5rem 1rem;
+    width: 300px;
+    font-family: inherit;
+    transition: box-shadow 0.2s;
+}
+
+.pt-graph-search:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+    border-color: #00ff00;
+}
+
+.pt-graph-body {
+    flex-grow: 1;
+    position: relative;
+}
+
+/* React Flow Overrides for Dark/Palantir Theme */
+.react-flow__node-default,
+.react-flow__node-input,
+.react-flow__node-output {
+    background: #1c2127;
+    color: #f5f8fa;
+    border: 1px solid #30404d;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    padding: 10px 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    transition: all 0.2s;
+}
+
+.react-flow__node-default:hover,
+.react-flow__node-input:hover,
+.react-flow__node-output:hover {
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+    border-color: #00ff00;
+    cursor: crosshair;
+}
+
+.react-flow__node-input {
+    border-top: 3px solid #ffff00;
+    /* Yellow for state institutions */
+}
+
+.react-flow__node-default {
+    border-left: 3px solid #00ff00;
+    /* Green for regular companies/contracts */
+}
+
+.react-flow__node-output {
+    border-bottom: 3px solid #ff0000;
+    /* Red for high-risk statutory reps / warnings */
+}
+
+.react-flow__edge-path,
+.react-flow__connection-path {
+    stroke: #5c7080;
+    stroke-width: 2;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+    stroke: #00ff00;
+    stroke-width: 3;
+}
+
+.react-flow__edge-text {
+    fill: #8a9ba8;
+    font-size: 0.7rem;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-weight: bold;
+}
+
+.react-flow__edge-textbg {
+    fill: #10161a;
+}
+
+.react-flow__controls {
+    background: #1c2127;
+    border: 1px solid #30404d;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+.react-flow__controls-button {
+    background: transparent;
+    border-bottom: 1px solid #30404d;
+    fill: #8a9ba8;
+}
+
+.react-flow__controls-button:hover {
+    background: #30404d;
+    fill: #f5f8fa;
+}
+
+.react-flow__minimap {
+    background: #10161a;
+    border: 1px solid #30404d;
+}

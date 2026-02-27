@@ -1,0 +1,128 @@
+/* Palantir-style Data Table styles */
+
+.pt-datatable-container {
+    background-color: var(--pt-color-bg-surface);
+    border: 1px solid var(--pt-color-border);
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(16, 22, 26, 0.4);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+.pt-datatable-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--pt-color-border);
+    background-color: rgba(16, 22, 26, 0.2);
+}
+
+.pt-datatable-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--pt-color-text-base);
+}
+
+.pt-input {
+    background-color: var(--pt-color-bg-base);
+    border: 1px solid var(--pt-color-border);
+    color: var(--pt-color-text-base);
+    padding: 8px 12px;
+    border-radius: 3px;
+    font-size: 13px;
+    font-family: var(--font-family-base);
+    width: 250px;
+    transition: all 0.2s;
+}
+
+.pt-input:focus {
+    outline: none;
+    border-color: var(--pt-color-accent);
+    box-shadow: 0 0 0 1px var(--pt-color-accent);
+}
+
+.pt-table-wrapper {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.pt-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 13px;
+}
+
+.pt-table th,
+.pt-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--pt-color-border);
+}
+
+.pt-table th {
+    color: var(--pt-color-text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    background-color: rgba(16, 22, 26, 0.4);
+    position: sticky;
+    top: 0;
+}
+
+.pt-table tbody tr:hover {
+    background-color: var(--pt-color-bg-hover);
+}
+
+.pt-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.font-mono {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    font-size: 12.5px;
+    color: #adb5bd;
+}
+
+.font-medium {
+    font-weight: 500;
+}
+
+.text-accent {
+    color: #48aff0;
+}
+
+.pt-tag {
+    display: inline-block;
+    background-color: rgba(19, 124, 189, 0.2);
+    color: #48aff0;
+    padding: 2px 6px;
+    border-radius: 2px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border: 1px solid rgba(19, 124, 189, 0.4);
+}
+
+.pt-table-empty {
+    text-align: center;
+    padding: 32px !important;
+    color: var(--pt-color-text-muted);
+    font-style: italic;
+}
+
+.pt-datatable-footer {
+    padding: 12px 20px;
+    font-size: 12px;
+    color: var(--pt-color-text-muted);
+    background-color: rgba(16, 22, 26, 0.2);
+    border-top: 1px solid var(--pt-color-border);
+}

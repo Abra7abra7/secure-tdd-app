@@ -1,0 +1,170 @@
+/* Palantir-style Dark Theme variables and Layout styles */
+
+:root {
+  --pt-color-bg-base: #10161a;
+  --pt-color-bg-surface: #293742;
+  --pt-color-bg-hover: #30404d;
+  --pt-color-text-base: #f5f8fa;
+  --pt-color-text-muted: #8a9ba8;
+  --pt-color-accent: #137cbd;
+  --pt-color-accent-hover: #106ba3;
+  --pt-color-border: #30404d;
+  
+  --topbar-height: 50px;
+  --sidebar-width: 240px;
+  
+  --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--pt-color-bg-base);
+  color: var(--pt-color-text-base);
+  font-family: var(--font-family-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Application shell */
+.app-shell {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.content-area {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  background-color: var(--pt-color-bg-base);
+}
+
+/* TopBar component */
+.palantir-topbar {
+  height: var(--topbar-height);
+  background-color: var(--pt-color-bg-surface);
+  border-bottom: 1px solid var(--pt-color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-shadow: 0 1px 3px rgba(16, 22, 26, 0.4);
+  z-index: 10;
+}
+
+.topbar-logo {
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+  color: var(--pt-color-text-base);
+}
+
+.topbar-search {
+  flex: 1;
+  max-width: 500px;
+  margin: 0 20px;
+}
+
+.topbar-search input {
+  width: 100%;
+  background-color: rgba(16, 22, 26, 0.3);
+  border: 1px solid var(--pt-color-border);
+  color: var(--pt-color-text-base);
+  padding: 6px 12px;
+  border-radius: 3px;
+  font-size: 14px;
+  font-family: var(--font-family-base);
+  transition: all 0.2s ease;
+}
+
+.topbar-search input:focus {
+  outline: none;
+  border-color: var(--pt-color-accent);
+  box-shadow: 0 0 0 1px var(--pt-color-accent);
+  background-color: rgba(16, 22, 26, 0.5);
+}
+
+.topbar-actions .profile-btn {
+  background: transparent;
+  border: 1px solid var(--pt-color-border);
+  color: var(--pt-color-text-muted);
+  padding: 4px 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+}
+
+.topbar-actions .profile-btn:hover {
+  background-color: var(--pt-color-bg-hover);
+  color: var(--pt-color-text-base);
+}
+
+/* Sidebar component */
+.palantir-sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--pt-color-bg-surface);
+  border-right: 1px solid var(--pt-color-border);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-shadow: 1px 0 3px rgba(16, 22, 26, 0.2);
+  z-index: 5;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 20px 0;
+  overflow-y: auto;
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item {
+  margin: 2px 0;
+}
+
+.nav-link {
+  display: block;
+  padding: 8px 16px 8px 24px;
+  color: var(--pt-color-text-muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+}
+
+.nav-link:hover {
+  background-color: var(--pt-color-bg-hover);
+  color: var(--pt-color-text-base);
+}
+
+.nav-link.active {
+  background-color: rgba(19, 124, 189, 0.15);
+  color: var(--pt-color-text-base);
+  border-left-color: var(--pt-color-accent);
+}
+
+.sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid var(--pt-color-border);
+  font-size: 11px;
+  color: rgba(138, 155, 168, 0.5);
+  text-align: center;
+}
