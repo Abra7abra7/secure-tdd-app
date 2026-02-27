@@ -10,58 +10,114 @@
     /* Monospace for intel feel */
 }
 
+/* Omnibox Global Search */
 .pt-dashboard-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 24px;
     border-bottom: 1px solid #202b33;
-    padding-bottom: 0.5rem;
+    padding-bottom: 16px;
 }
 
-.pt-intel-title {
-    color: #ced9e0;
-    font-size: 1.25rem;
-    letter-spacing: 0.05em;
-    margin: 0;
+.pt-omnibox {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    background: #111518;
+    border: 1px solid #30404d;
+    border-radius: 4px;
+    padding: 0 16px;
+    width: 400px;
+    height: 48px;
+    transition: all 0.2s ease;
 }
 
-.pt-live-indicator {
-    color: #00ff00;
-    /* Neon safe */
+.pt-omnibox:focus-within {
+    border-color: var(--pt-color-primary);
+    box-shadow: 0 0 10px rgba(85, 255, 170, 0.2);
+}
+
+.omnibox-icon {
+    color: var(--pt-color-text-muted);
+    margin-right: 12px;
+}
+
+.omnibox-input {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--pt-color-text-base) !important;
+    flex: 1;
+    font-size: 14px;
+    outline: none !important;
+    padding: 0 !important;
+    height: 100%;
+}
+
+.omnibox-input::placeholder {
+    color: var(--pt-color-text-muted);
+}
+
+/* KPI Cards Row */
+.pt-kpi-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.pt-kpi-card {
+    flex: 1;
+    background-color: #0a0a0a;
+    border: 1px solid #30404d;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.pt-kpi-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--pt-color-text-muted);
+}
+
+.kpi-icon {
+    background: #161b22;
+    padding: 12px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #30404d;
+}
+
+.kpi-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.kpi-label {
     font-size: 0.8rem;
-    animation: blink 2s infinite;
+    color: #8a9ba8;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
 }
 
-@keyframes blink {
-    0% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.3;
-    }
-
-    100% {
-        opacity: 1;
-    }
-}
-
-.pt-intel-timestamp {
-    font-size: 0.85rem;
-    color: #5c7080;
+.kpi-value {
+    font-size: 1.5rem;
+    color: #ced9e0;
+    font-weight: bold;
+    letter-spacing: 1px;
 }
 
 /* Grid Layout */
-.pt-grid-container {
+.pt-grid-container.custom-grid-layout {
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    grid-template-rows: auto auto auto;
-    gap: 1rem;
-    height: 100%;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: minmax(400px, auto);
+    gap: 16px;
+    height: auto;
 }
 
 .pt-widget {
