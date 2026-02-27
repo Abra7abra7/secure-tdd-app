@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
     ReactFlow,
     MiniMap,
@@ -8,29 +8,77 @@ import {
     useEdgesState,
     addEdge,
     BackgroundVariant,
+    type Node,
+    type Edge
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import './EntityGraph.css';
-
-const initialNodes = [
-    { id: '1', position: { x: 400, y: 100 }, data: { label: 'Ministerstvo Dopravy SR' }, type: 'input' },
-    { id: '2', position: { x: 200, y: 300 }, data: { label: 'Stavba a Cesty a.s.' } },
-    { id: '3', position: { x: 600, y: 300 }, data: { label: 'Národná diaľničná spoločnosť' } },
-    { id: '4', position: { x: 200, y: 500 }, data: { label: 'Ing. Jozef Mak (Štatutár)' }, type: 'output' },
-    { id: '5', position: { x: 400, y: 400 }, data: { label: 'Zmluva: CRZ-2023-002 (8.4M €)' } },
-];
-
-const initialEdges = [
-    { id: 'e1-2', source: '1', target: '2', label: 'Verejné obstarávanie' },
-    { id: 'e1-3', source: '1', target: '3', label: 'Zriaďovateľ' },
-    { id: 'e2-4', source: '2', target: '4', label: 'Personálne prepojenie', animated: true },
-    { id: 'e1-5', source: '1', target: '5', label: 'Objednávateľ' },
-    { id: 'e2-5', source: '2', target: '5', label: 'Dodávateľ' },
-];
+import { useContracts } from '../../api/useContracts';
 
 export const EntityGraph: React.FC = () => {
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+    const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
+    const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
+    const { data: contracts, isLoading } = useContracts();
+
+    // Map contracts to graph nodes/edges
+    useEffect(() => {
+        if (!contracts || contracts.length === 0) return;
+
+        const newNodes: Node[] = [];
+        const newEdges: Edge[] = [];
+
+        // Root Node
+        newNodes.push({
+            id: 'root',
+            position: { x: 400, y: 50 },
+            data: { label: 'SK (Slovenská Republika)' },
+            type: 'input'
+        });
+
+        // Track unique categories to avoid duplicates
+        const categories = Array.from(new Set(contracts.map(c => c.category)));
+        categories.forEach((cat, idx) => {
+            const catId = `cat-${idx}`;
+            newNodes.push({
+                id: catId,
+                position: { x: 200 + idx * 400, y: 200 },
+                data: { label: cat }
+            });
+            newEdges.push({
+                id: `edge-root-${catId}`,
+                source: 'root',
+                target: catId,
+                label: 'Odvetvie',
+                animated: true
+            });
+        });
+
+        // Add subjects (suppliers)
+        contracts.forEach((contract, i) => {
+            // Limit mapping to 10 entities to prevent massive graph clutter
+            if (i >= 15) return;
+
+            const suppId = `supp-${i}`;
+            const catId = `cat-${categories.indexOf(contract.category)}`;
+
+            newNodes.push({
+                id: suppId,
+                position: { x: (i % 5) * 200, y: 400 + Math.floor(i / 5) * 100 },
+                data: { label: contract.supplier },
+                type: 'output'
+            });
+
+            newEdges.push({
+                id: `edge-${catId}-${suppId}`,
+                source: catId,
+                target: suppId,
+                label: `Zmluva: ${contract.id}`
+            });
+        });
+
+        setNodes(newNodes);
+        setEdges(newEdges);
+    }, [contracts, setNodes, setEdges]);
 
     const onConnect = useCallback(
         (params: any) => setEdges((eds) => addEdge(params, eds)),
@@ -40,7 +88,7 @@ export const EntityGraph: React.FC = () => {
     return (
         <div className="pt-intel-graph-container" data-testid="entity-graph-container">
             <div className="pt-graph-toolbar">
-                <h3 className="pt-graph-title">Network Analysis: Entity Linkages</h3>
+                <h3 className="pt-graph-title">Network Analysis: Real-time Ontology {isLoading && <span className="pt-live-indicator" style={{ marginLeft: 10 }}>● LOADING DATA...</span>}</h3>
                 <input
                     type="text"
                     className="pt-graph-search"

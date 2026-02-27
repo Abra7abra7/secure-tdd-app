@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { LoginForm } from './components/LoginForm';
-import { Sidebar } from './components/layout/Sidebar'
 import { TopBar } from './components/layout/TopBar'
 import { DashboardGrid } from './components/dashboard/DashboardGrid'
 import { DataTable } from './components/contracts/DataTable'
@@ -41,15 +40,12 @@ function App() {
   return (
     <div className="app-shell">
       {isAuthenticated ? (
-        <>
-          <Sidebar currentView={currentView} onNavigate={setCurrentView} />
-          <div className="main-content">
-            <TopBar />
-            <main className="content-area pt-no-padding">
-              {renderContent()}
-            </main>
-          </div>
-        </>
+        <div className="main-content">
+          <TopBar currentView={currentView} onNavigate={setCurrentView} />
+          <main className="content-area pt-no-padding">
+            {renderContent()}
+          </main>
+        </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--pt-color-bg-base)', height: '100%', width: '100%' }}>
           <header className="app-header" style={{ textAlign: 'center', marginBottom: '30px' }}>
