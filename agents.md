@@ -1,54 +1,72 @@
-# Secure Public Data Dashboard (Slovakia)
-**Alias:** "Palantir-style" GovTech Dashboard
+# C.O.R.E. OSINT Analytics - Project Documentation
 
-> **TENTO SÚBOR MUSÍ BYŤ PREČÍTANÝ NA ZAČIATKU KAŽDEJ NOVEJ RELÁCIE (SESSION).**  
-> Určuje kontext projektu, naše technologické štandardy a metodiku vývoja. Nenechávame priestor na omyly.
+## 1. Architektúra Systému
+C.O.R.E. OSINT Analytics je single-page aplikácia (SPA) postavená na modernom React ekosystéme s dôrazom na rýchlosť, bezpečnosť a analytickú prácu s otvorenými zdrojmi.
 
----
+- **Frontend Framework:** React 18 + Vite
+- **Jazyk:** TypeScript
+- **State Management:** TanStack React Query (pre správu asynchrónnych dát a cache)
+- **CSS a Dizajn:** Custom "Palantir Dark Mode" (militaristický analytický vizuál zameraný na redukciu očnej únavy)
+- **Ikony:** Lucide React
 
-## 🏛️ O Projekte
-Účelom tohto projektu je vybudovať real-time, vizuálne atraktívny (dark-mode, premium) dashboard pre štátnu správu SR (Obce, VÚC, Štátne registre, Centrálny register zmlúv (CRZ), Verejné obstarávania).
-Aplikácia agreguje tieto verejné dáta a poskytuje analytikom pokročilé možnosti vyhľadávania a analýzy vzťahov (sieťové grafy, toky financií).
-Vzhľad sa inšpiruje analytickými platformami typu Palantir (hlboké tmavé UI, vysoký kontrast, zameranie na dáta, modré/akcentové farby, profesionálna typografia).
+## 2. Kľúčové Komponenty a Moduly
 
----
+### 2.1 TopBar Navigácia (`src/components/layout/TopBar.tsx`)
+Aplikácia využíva widescreen (horizontálny) layout. Zrušili sme pôvodný bočný panel na maximalizáciu priestoru pre vizualizácie. Z tohto panela sa ovláda celá sieť.
 
-## 🛠️ Tech Stack & Architektúra
-- **Frontend Framework:** React 18+ (s funkcionálnymi komponentmi a Hooks).
-- **Jazyk:** TypeScript (striktné typovanie je podmienkou).
-- **Build Tool:** Vite (rýchle HMR a build).
-- **Styling:** **Vanilla CSS** (žiadny Tailwind, Bootstrap ani iné knižnice okrem vyžiadaných). Používame CSS premenné (Design Tokeny) definované v `Layout.css` (napr. `--pt-color-bg-base`, `--pt-color-accent`). Všetky komponenty musia striktne nasledovať tento dizajnový jazyk.
-- **Dáta (Súčasnosť):** Všetky moduly aktuálne spúšťame nad **Mock dátami** (napr. `src/data/mockContracts.ts`). Akékoľvek nové moduly musia najprv dostať mock data a až v neskorších fázach sa napoja na reálne APIs (napr. Slovensko.Digital API).
-- **Testovanie:** Vitest a `@testing-library/react`.
+### 2.2 Dashboard Grid (`src/components/dashboard/DashboardGrid.tsx`)
+Základný pohľad s live KPI metrikami (Monitorované Zmluvy, Celkový Objem, Priemerný Ticket). Nachádza sa tu aj **Omnibox (Global Search)**, ktorým vie používateľ na jeden klik vyhľadať akékoľvek textové / IČO vstupy a okamžite ho to presmeruje na modul Subjekty.
 
----
+### 2.3 Databáza Zmlúv - CRZ (`src/components/contracts/DataTable.tsx`)
+Mriežka zameraná na vizualizáciu tabuľkových dát, integrovaná s mock/API dátami (`useContracts`). Podpora filtru, zoradenia a zvýraznenia rizikových (nadlimitných) tendrov.
 
-## 🔒 Naša Metodika Vývoja: Secure TDD (Test-Driven Development)
-Nesmieme napísať ani riadok produkčného kódu bez toho, aby sme prešli TDD cyklom. Postupujeme podľa `/.agents/workflows/tdd-process.md`:
+### 2.4 Entity Lookup (`src/components/entities/EntityLookup.tsx`)
+Modul na extrakciu subjektov zo štátneho registra (Slovensko.digital API / mock). Poskytuje podrobnú kartu subjektu po vyhľadaní.
 
-1.  **Red Phase:** Vyberieme si malú vlastnosť na implementáciu (napr. zobrazenie novej tabuľky). **Napíšeme zlyhávajúci test** (skript: `npx vitest run xyz`). Cieľom je definovať, ako má kód fungovať predtým, než ho vôbec napíšeme.
-2.  **Green Phase:** Napíšeme iba ten najnutnejší React/TS kód potrebný na to, aby test prešiel. Dôraz sa kladie na bezpečnosť (žiadna priama manipulácia dom, bezpečné spracovanie vstupov). Otestujeme ho (musí zbehnúť na zeleno).
-3.  **Refactor Phase:** Uhladíme kód, vyčistíme CSS (pridáme správny "Palantir" vzhľad), skontrolujeme TypeScript typovanie. Spustíme testy znova, aby sme sa uistili, že sme nič nepokazili.
-4.  **Visual Verification Phase:** Vždy po dokončenom module sa zavolá **automatizovaný prehliadač (`browser_subagent`)**, naloguje sa do aplikácie, pozrie si danú novú vizuálnu zmenu, klikne/filtruje a odfotí výsledok (`screenshot`) na overenie, že bol Palantir-dizajn správne aplikovaný a zarovnaný. Nestaviame veci naslepo.
+### 2.5 Geo Spatial Map (`src/components/map/GeoMap.tsx`)
+Založené na balíku `react-simple-maps` (D3-geo). Vykresľuje topografickú mapu SR s vyznačenými infraštruktúrnymi uzlami ("Radar pings") s interaktívnou telemetriou po kliknutí (súradnice, priorita uzla).
 
----
+### 2.6 Network Analysis / Entity Graph (`src/components/graph/EntityGraph.tsx`)
+Modul postavený na `xyflow/react` (React Flow).
+Graf je dynamicky prepojený na zmluvy stiahnuté z nášho dátoveho API. Po načítaní automaticky mapuje:
+- Koreň: `SK (Slovenská Republika)`
+- Odvetvia a Kategórie: (napr. Stavebníctvo)
+- Interaktívne listové uzly a hrany (Edges) reprezentujúce samotné víťazné subjekty tendrov a čísla konkrétnych zmlúv.
 
-## 🚀 Súčasný Stav a Ďalší Postup
-Projekt používame na trackovanie úloh dokument `task.md` (v zložke s artefaktami) a každý míľnik nahrávame do `walkthrough.md`.
+## 3. Testovanie a "Secure TDD"
+Celý vývoj prebiehal podľa filozofie TDD (Test-Driven Development), čiže testy chránia kód od prvého buildu.
 
-**Dokončené veci (Čo funguje):**
-- **Core Security:** Funkčný (zatiaľ mock) `LoginForm.tsx`, ktorý chráni celú analytickú časť za prihlasovacím oknom.
-- **Core Layout (Fáza 1):** Tmavý Palantir-style layout s `TopBar` a navigáciou v `Sidebar`.
-- **Contracts (Fáza 2):** Implementovaná `DataTable` pre pamäťovo efektívne prehľadávanie a filtrovanie mockup-zmlúv podľa štruktúry CRZ.
+### 3.1 Unit Testing (Vitest & React Testing Library)
+Nachádzajú sa tu kritické unitové testy na izolovanej úrovni komponentov (verifikácia renderovania, mockovaného API pre contracts a user flow clickov).
+- Príkaz pre beh: `npm run test`
 
-**Nasledujúce Veci (Na čom budeš pokračovať, prípadne o čo si požiada používateľ):**
-1.  **Fáza 3 - Entity Graph (Sieťová Analýza):** Začíname s modulom Analýzy prepojení. Vstúp do Red-Fázy pre inicializáciu prázdneho grafového okna/komponentu. Následne zistíme, akú vizualizačnú knižnicu pripojíme (napr. `react-flow-renderer`, poprípade iný vhodný engine).
-2.  **Fáza 4 - Modul Subjekty:** Prehľad inštitúcií, VÚC a miest obohatený o verejné štatistiky.
-3.  **Fáza X - API Integration:** Pripojenie na reálne back-end JSON dáta.
+### 3.2 End-to-End Testing (Cypress)
+Slúži na simuláciu skutočného analytika. E2E test preskúmava tú najdôležitejšiu (golden path) prierezovú cestičku:
+- Autentifikácia -> Dashboard -> Global Search v Omniboxe -> Automatizované presmerovanie na Register s IČOm Vahostavu -> Zobrazenie vojenskej entity card.
+- Príkaz pre spustenie headless: `npx cypress run`
+- Príkaz pre Cypress UI: `npx cypress open`
 
----
+## 4. Inštrukcie pre spustenie vývoja
 
-## ⚠️ Zásady
-*   **Nikdy** neupravuj produkčný kód predtým, ako je jasne dohodnutá požiadavka v štádiu plánu.
-*   **Vždy** rob vizuálne ukážky (cez screenshot robota).
-*   Ak nájdeš chybu Linteru alebo Type Error, fixni ju a re-verifikuj cez testy, nepokračuj v práci so skrytými varovaniami. Vždy čisti chyby!
+1. Inštalácia závislostí: `npm install`
+2. Spustenie vývojového servera: `npm run dev`
+3. Aplikácia bude dostupná na: `http://localhost:5173`
+
+## 5. Vývojové a Dizajnové Princípy pre Agentov (Rulebook)
+Tieto pravidlá **MUSIA** platiť pri akomkoľvek ďalšom vývoji a úpravách aplikácie:
+
+1. **Secure TDD a Red-Green-Verify Cyklus:**
+   - Vývoj prebieha Test-Driven štýlom: Píše sa komponentový izolačný test s minimom domény, alebo prierezový Cypress flow, ktorý zákonite zlyhá (**RED**).
+   - Len taký kód sa preleje do `src`, aby daný test bezpečne prešiel (**GREEN**).
+   - Nasleduje vizuálna kontrola v Subagent prehliadači, úprava stylingu, commit a push (**VERIFY**). Žiadny feature commit nesmie vzniknúť pri padajúcich testoch!
+   
+2. **Dizajnová Filozofia (Palantir Dark Mode):**
+   - Vizuál musí striktne dodržiavať "Data-Analytics / Military-Tech" štýl (Tmavý režim).
+   - Paleta: dominuje `var(--pt-color-bg-base)` (#10161a) a `var(--pt-color-bg-surface)` (#293742). Presvetlené moduly neprípustné (okrem výstražných "Alert" akcentov do žlta a červena).
+   - Dôraz na priestor (Widescreen Full-Screen layout). Žiadne bočné panely zbytočne plytvajúce šírku. Navigácia zostáva čisto v TopBare.
+
+3. **Napojovanie na Dátové Zdroje:**
+   - Aplikácia operuje s REST JSON dátami z CRZ, Slovensko.digital či Data.gov.sk. 
+   - Pravidlo pre štátne APIcka s mizerným uptime alebo "401 Unauthorized" bariérami: *Mock the fallback*. Každý model musí zvládať fungovať v izolovanom prostredí nad vymyslenými dátami so zhodnou architektúrou pre plynulý UI vývoj.
+
+*(Tento dokument bol navrhnutý ako architektonicko-pravidlový manuál C.O.R.E. projektu. Aktualizované asistentom Antigravity - Verzia 1.0)*
